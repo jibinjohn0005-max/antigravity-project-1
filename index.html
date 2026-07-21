@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calvix | Classic Calculator</title>
+    <meta name="description" content="A beautiful, premium classic calculator featuring advanced arithmetic, calculation history, and smooth animations.">
+    <!-- Google Fonts: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script>
+        // Redirect immediately if not logged in
+        if (sessionStorage.getItem('calvix_logged_in') !== 'true') {
+            window.location.href = 'login.html';
+        }
+    </script>
+</head>
+<body>
+    <!-- Background Animated Shapes -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    <div class="bg-glow bg-glow-3"></div>
+
+    <div class="calculator-container" id="calculator-app">
+        <!-- Main Calculator Card -->
+        <main class="calculator-card">
+            <!-- Header with Title & Theme/History Toggles -->
+            <header class="calc-header">
+                <div class="brand">
+                    <span class="brand-dot"></span>
+                    <h1>Calvix</h1>
+                </div>
+                <div class="header-actions">
+                    <button id="logout-btn" class="icon-btn" aria-label="Sign Out" title="Sign Out">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    </button>
+                    <button id="toggle-history-btn" class="icon-btn" aria-label="Toggle History" title="View History">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Screen / Display -->
+            <section class="calc-display-section">
+                <div id="calc-formula" class="calc-formula" aria-live="polite"></div>
+                <div id="calc-input" class="calc-input" aria-live="polite">0</div>
+            </section>
+
+            <!-- Keypad -->
+            <section class="calc-keypad" role="grid" aria-label="Calculator keypad">
+                <!-- Row 1: Scientific / Extra Functions -->
+                <button type="button" class="btn btn-sci" id="btn-power" data-val="^" role="gridcell" aria-label="exponentiation">xʸ</button>
+                <button type="button" class="btn btn-sci" id="btn-sqrt" data-val="sqrt" role="gridcell" aria-label="square root">√</button>
+                <button type="button" class="btn btn-sci" id="btn-percent" data-val="%" role="gridcell" aria-label="percentage">%</button>
+                <button type="button" class="btn btn-action" id="btn-clear" data-val="clear" role="gridcell" aria-label="clear all">AC</button>
+
+                <!-- Row 2 -->
+                <button type="button" class="btn btn-num" data-val="7" role="gridcell">7</button>
+                <button type="button" class="btn btn-num" data-val="8" role="gridcell">8</button>
+                <button type="button" class="btn btn-num" data-val="9" role="gridcell">9</button>
+                <button type="button" class="btn btn-op" id="btn-div" data-val="/" role="gridcell" aria-label="divide">÷</button>
+
+                <!-- Row 3 -->
+                <button type="button" class="btn btn-num" data-val="4" role="gridcell">4</button>
+                <button type="button" class="btn btn-num" data-val="5" role="gridcell">5</button>
+                <button type="button" class="btn btn-num" data-val="6" role="gridcell">6</button>
+                <button type="button" class="btn btn-op" id="btn-mul" data-val="*" role="gridcell" aria-label="multiply">×</button>
+
+                <!-- Row 4 -->
+                <button type="button" class="btn btn-num" data-val="1" role="gridcell">1</button>
+                <button type="button" class="btn btn-num" data-val="2" role="gridcell">2</button>
+                <button type="button" class="btn btn-num" data-val="3" role="gridcell">3</button>
+                <button type="button" class="btn btn-op" id="btn-sub" data-val="-" role="gridcell" aria-label="subtract">−</button>
+
+                <!-- Row 5 -->
+                <button type="button" class="btn btn-num" id="btn-neg" data-val="±" role="gridcell" aria-label="toggle sign">±</button>
+                <button type="button" class="btn btn-num" data-val="0" role="gridcell">0</button>
+                <button type="button" class="btn btn-num" data-val="." role="gridcell">.</button>
+                <button type="button" class="btn btn-op" id="btn-add" data-val="+" role="gridcell" aria-label="add">+</button>
+
+                <!-- Row 6: Utility & Equal -->
+                <button type="button" class="btn btn-backspace" id="btn-backspace" data-val="backspace" role="gridcell" aria-label="backspace">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/><line x1="18" y1="9" x2="12" y2="15"/><line x1="12" y1="9" x2="18" y2="15"/></svg>
+                </button>
+                <button type="button" class="btn btn-equal" id="btn-equal" data-val="=" role="gridcell" aria-label="equals">=</button>
+            </section>
+        </main>
+
+        <!-- Slide-out History Panel -->
+        <aside class="history-panel" id="history-panel" aria-label="Calculation history">
+            <div class="history-header">
+                <h2>History</h2>
+                <button id="close-history-btn" class="icon-btn" aria-label="Close history">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="history-list-container">
+                <ul id="history-list" class="history-list">
+                    <!-- History items will be injected here by JS -->
+                    <li class="history-empty">No calculations yet</li>
+                </ul>
+            </div>
+            <div class="history-footer">
+                <button id="clear-history-btn" class="clear-history-btn">Clear History</button>
+            </div>
+        </aside>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
